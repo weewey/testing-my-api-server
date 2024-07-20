@@ -1,10 +1,18 @@
+import { UserRepository } from '../db/memoryDb';
 import { User } from '../models/userModel';
-import { MemoryDb } from '../db/memoryDb';
 
-export class UserService {
-    private db: MemoryDb;
+export interface IUserService {
+    getAllUsers(): Promise<User[]>;
+    getUserById(id: string): Promise<User | undefined>;
+    addUser(user: User): Promise<User>;
+    updateUserById(id: string, updatedUser: User): Promise<User | undefined>;
+    deleteUserById(id: string): Promise<void>;
+}
 
-    constructor(db: MemoryDb) {
+export class UserService implements IUserService {
+    private db: UserRepository;
+
+    constructor(db: UserRepository) {
         this.db = db;
     }
 

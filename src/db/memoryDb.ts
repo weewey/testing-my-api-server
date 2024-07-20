@@ -1,6 +1,11 @@
 import { User } from '../models/userModel';
 
-export class MemoryDb {
+export interface UserRepository {
+    getUsers(): User[];
+    setUsers(newUsers: User[]): void;
+}
+
+export class MemoryDb implements UserRepository {
     private users: User[] = []; // In-memory database
 
     getUsers(): User[] {

@@ -1,10 +1,19 @@
 import { Request, Response } from 'express';
-import { UserService } from '../services/userService';
+import { IUserService } from '../services/userService';
+
+
+export interface IUserController {
+    getUsers(req: Request, res: Response): Promise<void>;
+    getUser(req: Request, res: Response): Promise<void>;
+    createUser(req: Request, res: Response): Promise<void>;
+    updateUser(req: Request, res: Response): Promise<void>;
+    deleteUser(req: Request, res: Response): Promise<void>;
+}
 
 export class UserController {
-    private userService: UserService;
+    private userService: IUserService;
 
-    constructor(userService: UserService) {
+    constructor(userService: IUserService) {
         this.userService = userService;
     }
 
