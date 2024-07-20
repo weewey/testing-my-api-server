@@ -1,13 +1,17 @@
 import { User } from '../models/userModel';
 
-let users: User[] = []; // In-memory database
+export class MemoryDb {
+    private users: User[] = []; // In-memory database
 
-export const getUsers = (): User[] => users;
+    getUsers(): User[] {
+        return this.users;
+    }
 
-export const setUsers = (newUsers: User[]): void => {
-    users = newUsers;
-};
+    setUsers(newUsers: User[]): void {
+        this.users = newUsers;
+    }
 
-export const resetUsers = (): void => {
-    users = [];
-};
+    resetUsers(): void {
+        this.users = [];
+    }
+}

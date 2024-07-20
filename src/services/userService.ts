@@ -1,33 +1,81 @@
 import { User } from '../models/userModel';
-import { getUsers, setUsers } from '../db/memoryDb';
+import { MemoryDb } from '../db/memoryDb';
 
-export const getAllUsers = async (): Promise<User[]> => {
-    return getUsers();
-};
+export class UserService {
+    private db: MemoryDb;
 
-export const getUserById = async (id: string): Promise<User | undefined> => {
-    return getUsers().find(user => user.id === id);
-};
-
-export const addUser = async (user: User): Promise<User> => {
-    const users = getUsers();
-    users.push(user);
-    setUsers(users);
-    return user;
-};
-
-export const updateUserById = async (id: string, updatedUser: User): Promise<User | undefined> => {
-    const users = getUsers();
-    const index = users.findIndex(user => user.id === id);
-    if (index !== -1) {
-        users[index] = updatedUser;
-        setUsers(users);
-        return updatedUser;
+    constructor(db: MemoryDb) {
+        this.db = db;
     }
-    return undefined;
-};
 
-export const deleteUserById = async (id: string): Promise<void> => {
-    const users = getUsers();
-    setUsers(users.filter(user => user.id !== id));
-};
+    async getAllUsers(): Promise<User[]> {
+        return this.db.getUsers();
+    }
+
+    async getUserById(id: string): Promise<User | undefined> {
+        return this.db.getUsers().find(user => user.id === id);
+    }
+
+    async addUser(user: User): Promise<User> {
+        const users = this.db.getUsers();
+        users.push(user);
+        this.db.setUsers(users);
+        return user;
+    }
+
+    async updateUserById(id: string, updatedUser: User): Promise<User | undefined> {
+        const users = this.db.getUsers();
+        const index = users.findIndex(user => user.id === id);
+        if (index !== -1) {
+            users[index] = updatedUser;
+            this.db.setUsers(users);
+            return updatedUser;
+        }
+        return undefined;
+    }
+
+    async deleteUserById(id: string): Promise<void> {
+        const users = this.db.getUsers();
+        this.db.setUsers(users.filter(user => user.id !== id));
+    }
+}
+
+// NOT DEPENDENCY INJECTED
+
+// import { User } from '../models/userModel';
+// import { MemoryDb } from '../db/memoryDb';
+
+// export class UserService {
+//     private db: MemoryDb = new MemoryDb();
+
+//     async getAllUsers(): Promise<User[]> {
+//         return this.db.getUsers();
+//     }
+
+//     async getUserById(id: string): Promise<User | undefined> {
+//         return this.db.getUsers().find(user => user.id === id);
+//     }
+
+//     async addUser(user: User): Promise<User> {
+//         const users = this.db.getUsers();
+//         users.push(user);
+//         this.db.setUsers(users);
+//         return user;
+//     }
+
+//     async updateUserById(id: string, updatedUser: User): Promise<User | undefined> {
+//         const users = this.db.getUsers();
+//         const index = users.findIndex(user => user.id === id);
+//         if (index !== -1) {
+//             users[index] = updatedUser;
+//             this.db.setUsers(users);
+//             return updatedUser;
+//         }
+//         return undefined;
+//     }
+
+//     async deleteUserById(id: string): Promise<void> {
+//         const users = this.db.getUsers();
+//         this.db.setUsers(users.filter(user => user.id !== id));
+//     }
+// }
